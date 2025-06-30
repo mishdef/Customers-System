@@ -36,12 +36,12 @@ namespace ConsoleApp1
                 if (prevFile == "")
                 {
                     Console.WriteLine();
-                    fileName = InputFileName("Input filename (must end with \".bin\") --> ", ".bin");
+                    fileName = InputFileName("Input filename (filename must end with \".bin\") --> ", ".bin");
                 }
                 else
                 {
                     Console.WriteLine(
-                        $"Do you want open previous file ({prevFile})? \n\tIf you want, press Enter. \n\tIf you don`n, input filename. \n\t(if it exists, it will open. If not exists, it will create this file)"
+                        $"Do you want to open the previous file ({prevFile})? \n\tIf you want, press Enter. \n\tIf you don't, enter a new filename. \n\t(If it exists, it will be opened. If it doesn't exist, it will be created.)"
                     );
                     fileName = inputFileName("", prevFile);
                 }
@@ -66,7 +66,7 @@ namespace ConsoleApp1
                     try
                     {
                         Console.Clear();
-                        Console.WriteLine("+=== MenuCommand ===+");
+                        Console.WriteLine("+=== Main Menu ===+");
                         Console.WriteLine("1. Add new customer");
                         Console.WriteLine("2. Search");
 
@@ -84,7 +84,7 @@ namespace ConsoleApp1
                                 }
                             default:
                                 {
-                                    Console.WriteLine("WARNING | Unexisted menu item. Try again...");
+                                    Console.WriteLine("WARNING | Invalid menu item. Try again...");
                                     break;
                                 }
                         }
@@ -141,7 +141,7 @@ namespace ConsoleApp1
                     return prewFilename;
                 if (!(fileName.EndsWith(".bin")))
                 {
-                    Console.WriteLine("File name needs to end with \".bin\". Try Again.");
+                    Console.WriteLine("File name must end with \".bin\". Please try again.");
                 }
             } while (!(fileName.EndsWith(".bin")));
             return fileName;
@@ -153,7 +153,7 @@ namespace ConsoleApp1
             using (BinaryReader read = new BinaryReader(file))
             {
                 if (file.Length == 0)
-                    return $"WARNING | File exists but it's empty...";
+                    return $"WARNING | File exists but it's empty.";
 
                 string text = "";
                 try
@@ -179,7 +179,7 @@ namespace ConsoleApp1
                     i++;
                 }
 
-                return $"Loaded {i} customer`s.";
+                return $"Loaded {i} customers.";
             }
         }
 
@@ -189,22 +189,22 @@ namespace ConsoleApp1
             {
                 try
                 {
-                    string promt = "";
+                    string prompt = "";
                     Customer[] foundedCustomers = new Customer[0];
                     do
                     {
                         Console.Clear();
-                        Console.WriteLine("Input promt --> ");
-                        promt = Console.ReadLine();
-                        if (promt == "exit")
+                        Console.WriteLine("Input prompt --> ");
+                        prompt = Console.ReadLine();
+                        if (prompt == "exit")
                             return;
-                        if (promt != "")
+                        if (prompt != "")
                             break;
                     } while (true);
 
                     foreach (Customer customer in customers)
                     {
-                        if (customer.ToFileText().Contains(promt))
+                        if (customer.ToFileText().Contains(prompt))
 
                         {
                             Array.Resize(ref foundedCustomers, foundedCustomers.Length + 1);
@@ -216,7 +216,7 @@ namespace ConsoleApp1
 
                     if (foundedCustomers.Length == 0)
                     {
-                        MyFunctions.MessageBox.Show("Nothing was found...", "Message", MessageBox.Buttons.Ok);
+                        MyFunctions.MessageBox.Show("No results found.", "Message", MessageBox.Buttons.Ok);
                         return;
                     }
 
@@ -226,7 +226,7 @@ namespace ConsoleApp1
 
                         Console.WriteLine(customers[choose - 1].ToString() + "\n");
 
-                        Console.WriteLine("Press enter to edit or write \"exit\" for exit");
+                        Console.WriteLine("Press enter to edit or type \"exit\" to exit");
                         string res = Console.ReadLine();
                         if (res == "exit")
                         {
@@ -240,7 +240,7 @@ namespace ConsoleApp1
                     }
                     else
                     {
-                        Console.WriteLine($"Founded {foundedCustomers.Length} customers");
+                        Console.WriteLine($"Found {foundedCustomers.Length} customers");
                         int i = 1;
                         foreach (Customer customer in foundedCustomers)
                         {
@@ -260,9 +260,9 @@ namespace ConsoleApp1
                             Console.Clear();
                             Console.WriteLine("+=== Customer Menu ===+");
                             Console.WriteLine("1. Add service");
-                            Console.WriteLine("2. Edit customer`s info");
+                            Console.WriteLine("2. Edit customer's information");
                             Console.WriteLine("3. Delete customer");
-                            Console.WriteLine("4. Show customer`s info");
+                            Console.WriteLine("4. Show customer's information");
                             Console.WriteLine("5. Main menu");
 
                             switch (InputInt("Input number --> "))
@@ -279,7 +279,7 @@ namespace ConsoleApp1
                                     }
                                 case 3:
                                     {
-                                        Console.WriteLine("Are you shoore? (y/n)\n");
+                                        Console.WriteLine("Are you sure? (y/n)\n");
                                         Console.CursorVisible = false;
                                         ConsoleKeyInfo key = Console.ReadKey();
                                         Console.CursorVisible = true;
@@ -288,7 +288,7 @@ namespace ConsoleApp1
                                             DellCustomer(foundedCustomers[choose - 1], fileName);
                                             AcceptChanges(fileName);
 
-                                            Console.WriteLine($"\nCustomer is deleted...");
+                                            Console.WriteLine($"\nCustomer is deleted.");
                                             return;
                                         }
                                         break;
@@ -307,7 +307,7 @@ namespace ConsoleApp1
                                     }
                                 default:
                                     {
-                                        Console.WriteLine("WARNING | Unexisted menu item. Try again...");
+                                        Console.WriteLine("WARNING | Invalid menu item. Try again...");
                                         break;
                                     }
                             }
@@ -347,7 +347,7 @@ namespace ConsoleApp1
                     {
                         case 0:
                             {
-                                Console.Write("Input date (HH:mm , DD.MM.YYYY) (or press Enter to skip)--> ");
+                                Console.Write("Input date (HH:mm, DD.MM.YYYY) (or press Enter to skip)--> ");
                                 temp = Console.ReadLine();
                                 if (temp != "")
                                 {
@@ -391,7 +391,7 @@ namespace ConsoleApp1
                                 }
                                 else if (key.KeyChar == 'c' || key.KeyChar == 'C')
                                 {
-                                    Console.WriteLine("\nAdding service is canceled. Comming back to main menu...");
+                                    Console.WriteLine("\nAdding service is canceled. Coming back to main menu...");
                                     return;
                                 }
                                 else
@@ -442,7 +442,7 @@ namespace ConsoleApp1
                     Console.Clear();
                     Console.WriteLine($"Name: {name}");
                     Console.WriteLine($"Phone: {phone}");
-                    Console.WriteLine($"Adress: {adress}");
+                    Console.WriteLine($"Address: {adress}");
 
                     switch (i)
                     {
@@ -498,7 +498,7 @@ namespace ConsoleApp1
                                 }
                                 else if (key.KeyChar == 'c' || key.KeyChar == 'C')
                                 {
-                                    Console.WriteLine("\nEditing cusomer is canceled. Comming back to main menu...");
+                                    Console.WriteLine("\nEditing customer is canceled. Coming back to main menu...");
                                     return;
                                 }
                                 else
@@ -531,7 +531,7 @@ namespace ConsoleApp1
                     Console.Clear();
                     Console.WriteLine($"Name: {name}");
                     Console.WriteLine($"Phone: {phone}");
-                    Console.WriteLine($"Adress: {adress}");
+                    Console.WriteLine($"Address: {adress}");
 
                     switch (i)
                     {
@@ -551,7 +551,7 @@ namespace ConsoleApp1
                             }
                         case 2:
                             {
-                                Console.Write("Input address (if dont want just press Enter)-->");
+                                Console.Write("Input address (if don't want just press Enter)-->");
                                 adress = Console.ReadLine();
                                 if (adress == "")
                                 {
@@ -582,7 +582,7 @@ namespace ConsoleApp1
                                 }
                                 else if (key.KeyChar == 'c' || key.KeyChar == 'C')
                                 {
-                                    Console.WriteLine("\nCreating new customer is canceled. Comming back to main menu...");
+                                    Console.WriteLine("\nCreating new customer is canceled. Coming back to main menu...");
                                     return;
                                 }
                                 else
