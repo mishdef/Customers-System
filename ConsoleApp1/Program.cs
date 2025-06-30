@@ -194,7 +194,7 @@ namespace ConsoleApp1
                     do
                     {
                         Console.Clear();
-                        Console.WriteLine("Input prompt --> ");
+                        Console.WriteLine("Input prompt (input '/' to show all customers)--> ");
                         prompt = Console.ReadLine();
                         if (prompt == "exit")
                             return;
@@ -258,11 +258,14 @@ namespace ConsoleApp1
                         do
                         {
                             Console.Clear();
+                            DrawLine(foundedCustomers[choose - 1].ToString().Length);
+                            Console.WriteLine(foundedCustomers[choose - 1].ToString());
+                            DrawLine(foundedCustomers[choose - 1].ToString().Length);
                             Console.WriteLine("+=== Customer Menu ===+");
                             Console.WriteLine("1. Add service");
                             Console.WriteLine("2. Edit customer's information");
                             Console.WriteLine("3. Delete customer");
-                            Console.WriteLine("4. Show customer's information");
+                            Console.WriteLine("4. Delete service");
                             Console.WriteLine("5. Main menu");
 
                             switch (InputInt("Input number --> "))
@@ -295,10 +298,31 @@ namespace ConsoleApp1
                                     }
                                 case 4:
                                     {
-                                        DrawLine(foundedCustomers[choose - 1].ToString().Length);
-                                        Console.WriteLine(foundedCustomers[choose - 1].ToString());
-                                        DrawLine(foundedCustomers[choose - 1].ToString().Length);
-                                        Console.ReadKey();
+                                        if (foundedCustomers[choose - 1].Services == null || foundedCustomers[choose - 1].Services.Length == 0 || foundedCustomers[choose - 1].Services[0].Length == 0)
+                                        {
+                                            Console.WriteLine("No services to delete.");
+                                            Console.WriteLine("Press Enter to continue...");
+                                            Console.ReadLine();
+                                            break;
+                                        }
+                                        else
+                                        {
+                                            DisplayCustomerServices(foundedCustomers[choose - 1]);
+                                            int serviceIndex = InputInt("Input service number to delete --> ", InputType.With, 1, foundedCustomers[choose - 1].Services[0].Length);
+                                            Console.WriteLine("Are you sure? (y/n)\n");
+                                            Console.CursorVisible = false;
+                                            ConsoleKeyInfo key = Console.ReadKey();
+                                            Console.CursorVisible = true;
+                                            if (key.KeyChar == 'y' || key.KeyChar == 'Y')
+                                            {
+                                                foundedCustomers[choose - 1].DeleteService(serviceIndex - 1);
+                                                AcceptChanges(fileName);
+                                            }
+                                            else
+                                            {
+                                                Console.WriteLine("\nDeleting service is canceled. Coming back to main menu...");
+                                            }
+                                        }
                                         break;
                                     }
                                 case 5:
@@ -323,6 +347,27 @@ namespace ConsoleApp1
                     Console.WriteLine(ex.Message);
                 }
             } while (true);
+        }
+
+        static void DisplayCustomerServices(Customer customer)
+        {
+            string[][] services = customer.Services;
+
+            if (services == null || services.Length != 3 || services[0].Length == 0)
+            {
+                Console.WriteLine($"No services recorded for customer: {customer.Name}");
+                return;
+            }
+
+            Console.WriteLine($"─────────── Services for {customer.Name} ────────────");
+            for (int i = 0; i < services[0].Length; i++)
+            {
+                string date = services[0][i];
+                string description = services[1][i];
+                string cost = services[2][i];
+                Console.WriteLine($"{i + 1}. Date: {date}, Description: {description}, Cost: {cost}");
+            }
+            Console.WriteLine("──────────────────────────────────────────────────────");
         }
 
         static void AddService(string fileName, Customer customer)

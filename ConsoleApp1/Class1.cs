@@ -22,6 +22,7 @@ namespace ConsoleApp1
             new string[] { }
         };
 
+        public string[][] Services { get { return _services; } set { _services = value; }}
         public string Name { get { return _name; } set { _name = value; } }
         public string PhoneNumber { get { return _phoneNumber; } set { _phoneNumber = value; } }
         public string Address { get { return _address; } set { _address = value; } }
@@ -41,6 +42,27 @@ namespace ConsoleApp1
 
                 return "Success! New service added!";
             }catch (Exception ex) { return $"Error in adding new service to customer: {ex.Message}"; }
+        }
+
+        public bool DeleteService(int serviceIndex)
+        {
+            int currentServiceCount = _services[0].Length;
+
+            if (serviceIndex < currentServiceCount - 1)
+            {
+                for (int i = serviceIndex; i < currentServiceCount - 1; i++)
+                {
+                    _services[0][i] = _services[0][i + 1];
+                    _services[1][i] = _services[1][i + 1];
+                    _services[2][i] = _services[2][i + 1];
+                }
+            }
+
+            Array.Resize(ref _services[0], currentServiceCount - 1);
+            Array.Resize(ref _services[1], currentServiceCount - 1);
+            Array.Resize(ref _services[2], currentServiceCount - 1);
+
+            return true;
         }
 
         public string ToFileText()
